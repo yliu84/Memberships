@@ -167,9 +167,21 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Entities\Item.cs" />
+    <Compile Include="Entities\ItemType.cs" />
+    <Compile Include="Entities\Part.cs" />
+    <Compile Include="Entities\Product.cs" />
+    <Compile Include="Entities\ProductItem.cs" />
+    <Compile Include="Entities\ProductLinkText.cs" />
+    <Compile Include="Entities\ProductType.cs" />
+    <Compile Include="Entities\Section.cs" />
+    <Compile Include="Entities\Subscription.cs" />
+    <Compile Include="Entities\SubscriptionProduct.cs" />
+    <Compile Include="Entities\UserSubscription.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -180,6 +192,14 @@
     <Compile Include="Migrations\201704280201534_AddItemTable.cs" />
     <Compile Include="Migrations\201704280201534_AddItemTable.Designer.cs">
       <DependentUpon>201704280201534_AddItemTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704280210295_AddEntites.cs" />
+    <Compile Include="Migrations\201704280210295_AddEntites.Designer.cs">
+      <DependentUpon>201704280210295_AddEntites.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704280214520_AddEntites2.cs" />
+    <Compile Include="Migrations\201704280214520_AddEntites2.Designer.cs">
+      <DependentUpon>201704280214520_AddEntites2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -214,6 +234,7 @@
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\Documents\test_pdf.pdf" />
+    <Content Include="Areas\Admin\Views\web.config" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -266,9 +287,13 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\_AdminMenuPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -280,6 +305,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704280201534_AddItemTable.resx">
       <DependentUpon>201704280201534_AddItemTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704280210295_AddEntites.resx">
+      <DependentUpon>201704280210295_AddEntites.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704280214520_AddEntites2.resx">
+      <DependentUpon>201704280214520_AddEntites2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
