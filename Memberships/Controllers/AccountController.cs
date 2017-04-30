@@ -13,6 +13,9 @@ using System.Collections.Generic;
 using Memberships.Extensions;
 using System.Web.Security;
 using System.Net;
+using System.Data.Entity;
+using Memberships.Entities;
+
 
 namespace Memberships.Controllers
 {
@@ -683,5 +686,112 @@ namespace Memberships.Controllers
             }
             return View(model);
         }
+
+        [AllowAnonymous]
+        public async Task<ActionResult> Subscription(string userId)
+        {
+            if (userId == null || userId.Equals(string.Empty))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var model = new UserSubscriptionViewModel();
+            var db = new ApplicationDbContext();
+
+            model.UserSubscriptions = await
+                (from us in db.UserSubscriptions
+                 join s in db.Subscriptions on us.SubscriptionId equals s.Id
+                 where us.UserId.Equals(userId)
+                 select new UserSubscriptionModel
+                 {
+                     Id = us.SubscriptionId,
+                     StartDate = us.StartDate,
+                     EndDate = us.EndDate,
+                     Description = s.Description,
+                     RegistrationCode = s.RegistrationCode,
+                     Title = s.Title
+                 }).ToListAsync();
+
+            var ids = model.UserSubscriptions.Select(us => us.Id);
+
+            model.Subscriptions = await db.Subscriptions.Where(s => !ids.Contains(s.Id)).ToListAsync();
+
+            model.DisableDropDown = model.Subscriptions.Count().Equals(0);
+            model.UserId = userId;
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Subscription(UserSubscriptionViewModel model)
+        {
+            try
+            {
+                if (model == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                if (ModelState.IsValid)
+                {
+
+                    var db = new ApplicationDbContext();
+                    db.UserSubscriptions.Add(new UserSubscription
+                    {
+                        UserId = model.UserId,
+                        SubscriptionId = model.SubscriptionId,
+                        StartDate = DateTime.Now,
+                        EndDate = DateTime.MaxValue
+                    });
+
+                    await db.SaveChangesAsync();
+
+
+                }
+            }
+            catch
+            {
+
+            }
+            return RedirectToAction("Subscription", "Account", new { userId = model.UserId });
+        }
+
+    
+        [AllowAnonymous]
+        public async Task<ActionResult> RemoveUserSubscription(string userId, int subscriptionId)
+        {
+            try
+            {
+                if (userId == null || userId.Equals(string.Empty) || subscriptionId <= 0)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                if (ModelState.IsValid)
+                {
+
+                    var db = new ApplicationDbContext();
+                    var subscriptions = db.UserSubscriptions.Where(
+                        us => us.UserId.Equals(userId) && 
+                            us.SubscriptionId.Equals(subscriptionId));
+
+                    db.UserSubscriptions.RemoveRange(subscriptions);
+
+                    await db.SaveChangesAsync();
+
+
+                }
+            }
+            catch
+            {
+
+            }
+            return RedirectToAction("Subscription", "Account", new { userId = userId });
+        }
     }
+
+   
 }
