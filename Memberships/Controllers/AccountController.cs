@@ -11,6 +11,8 @@ using Microsoft.Owin.Security;
 using Memberships.Models;
 using System.Collections.Generic;
 using Memberships.Extensions;
+using System.Web.Security;
+using System.Net;
 
 namespace Memberships.Controllers
 {
@@ -81,6 +83,7 @@ namespace Memberships.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    FormsAuthentication.SetAuthCookie(model.Email.ToString(), false);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -499,6 +502,186 @@ namespace Memberships.Controllers
 
             return View(users);
 
+        }
+
+        [AllowAnonymous]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(UserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    IsActive = true,
+                    Registered = DateTime.Now,
+                    EmailConfirmed = true
+                };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Account");
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public async Task<ActionResult> Edit(string userId)
+        {
+            if (userId == null || userId.Equals(string.Empty))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ApplicationUser user = await UserManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            var model = new UserViewModel
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Id = user.Id,
+                Password = user.PasswordHash
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(UserViewModel model)
+        {
+            try
+            {
+
+
+                if (model == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                if (ModelState.IsValid)
+                {
+                    var user = await UserManager.FindByIdAsync(model.Id);
+
+                    if (user != null)
+                    {
+                        user.Email = model.Email;
+                        user.UserName = model.Email;
+                        user.FirstName = model.FirstName;
+                        user.LastName = model.LastName;
+
+                        if (!user.PasswordHash.Equals(model.Password))
+                            user.PasswordHash = UserManager.PasswordHasher.HashPassword(model.Password);
+
+                        var result = await UserManager.UpdateAsync(user);
+
+                        if (result.Succeeded)
+                        {
+                            return RedirectToAction("Index");
+                        }
+                        AddErrors(result);
+
+
+
+                    }
+
+                }
+            }
+            catch
+            {
+
+            }
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public async Task<ActionResult> Delete(string userId)
+        {
+            if (userId == null || userId.Equals(string.Empty))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ApplicationUser user = await UserManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            var model = new UserViewModel
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Id = user.Id,
+                Password = "Fake Password"
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(UserViewModel model)
+        {
+            try
+            {
+
+
+                if (model == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                if (ModelState.IsValid)
+                {
+                    var user = await UserManager.FindByIdAsync(model.Id);
+                    var result = await UserManager.DeleteAsync(user);
+
+                    if(result.Succeeded)
+                    {
+                        var db = new ApplicationDbContext();
+                        var subscriptions = db.UserSubscriptions.Where(u => u.UserId.Equals(user.Id));
+                        db.UserSubscriptions.RemoveRange(subscriptions);
+
+                        await db.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Account");
+                    }
+
+                    AddErrors(result);
+                    
+
+                }
+            }
+            catch
+            {
+
+            }
+            return View(model);
         }
     }
 }
