@@ -15,7 +15,7 @@ using System.Web.Security;
 using System.Net;
 using System.Data.Entity;
 using Memberships.Entities;
-
+using System.Security.Authentication;
 
 namespace Memberships.Controllers
 {
@@ -86,7 +86,6 @@ namespace Memberships.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    //FormsAuthentication.SetAuthCookie(model.Email.ToString(), false);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -97,6 +96,8 @@ namespace Memberships.Controllers
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
+
+
         }
 
         //
