@@ -3,10 +3,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/membership")
     @Scripts.Render("~/bundles/modernizr")
+
 
 </head>
 <body>
@@ -18,7 +20,11 @@
                     <span class="icon-bar navbar-inverse"></span>
                     <span class="icon-bar navbar-inverse"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @*@Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+                <a class="navbar-brand" href="~/Home/Index">
+                    <img src="~/Content/Logos/membership-icon-30x152.png" class="visible-xs" />
+                    <img src="~/Content/Logos/membership-icon-45x184.png" class="hidden-xs"/>
+                </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

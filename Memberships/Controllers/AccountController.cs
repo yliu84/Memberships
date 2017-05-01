@@ -86,7 +86,7 @@ namespace Memberships.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    FormsAuthentication.SetAuthCookie(model.Email.ToString(), false);
+                    //FormsAuthentication.SetAuthCookie(model.Email.ToString(), false);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
