@@ -31,7 +31,8 @@ namespace Memberships
                       "~/Scripts/AdminMenu.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/ui").Include(
-                      "~/Scripts/Carret.js"));
+                      "~/Scripts/Carret.js",
+                      "~/Scripts/JWPlayer.js"));
 
             bundles.Add(new StyleBundle("~/Content/membership").Include(
                       "~/Content/navbar.css",

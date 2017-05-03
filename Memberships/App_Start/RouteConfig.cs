@@ -18,6 +18,12 @@ namespace Memberships
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "ProductContent",
+                url: "{controller}/{action}/{productId}/{itemId}",
+                defaults: new { controller = "ProductContent", action = "Index"}
+            );
         }
     }
 }

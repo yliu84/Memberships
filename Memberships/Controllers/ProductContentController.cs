@@ -19,5 +19,11 @@ namespace Memberships.Controllers
 
             return View(sections);
         }
+
+        public async Task<ActionResult> Content(int productId, int itemId)
+        {
+            var model = await SectionExtensions.GetContentAsync(productId, itemId);
+            return View("Content", model);
+        }
     }
 }
