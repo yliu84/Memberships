@@ -14,7 +14,7 @@ namespace Memberships.Models
         public string Description { get; set; }
         public bool IsDownload { get; set; }
         public bool IsAvailable { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
 
     }
 }
