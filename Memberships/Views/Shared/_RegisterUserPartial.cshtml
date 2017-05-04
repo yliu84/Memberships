@@ -21,11 +21,11 @@
 
             <div class="input-group input-group-sm">
                 <span class="input-group-addon glyphicon glyphicon-lock"></span>
-                @Html.TextBoxFor(m => m.Password, new { @class = "form-control password", @placeholder = "Password" })
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control password", @placeholder = "Password" })
             </div>
 
             <div class="register-checkbox">
-                @Html.CheckBoxFor(m => m.AcceptUserAgreement, new {@date_register_User_agreement_click = "" })
+                @Html.CheckBoxFor(m => m.AcceptUserAgreement, new {@data_register_user_agreement_click = "" })
                 <span>I Accept the @Html.ActionLink("Terms of use","TermsOfUse","Legal")</span>
             </div>
 
