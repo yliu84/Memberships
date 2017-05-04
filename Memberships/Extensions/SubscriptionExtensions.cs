@@ -1,4 +1,5 @@
 ﻿using Memberships.Entities;
+using Memberships.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -59,6 +60,30 @@ namespace Memberships.Extensions
             
 
 
+        }
+    
+        public static async Task<bool> RegisterUserSubscriptionCode(string userId, string code)
+        {
+            try
+            {
+                var db = ApplicationDbContext.Create();
+                var id = await db.Subscriptions.GetSubscriptionIdByResitrationCode(code);
+
+                if (id <= 0)
+                    return false;
+
+                await db.UserSubscriptions.Register(id, userId);
+
+                if (db.ChangeTracker.HasChanges())
+                    await db.SaveChangesAsync();
+
+                return true;
+
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
