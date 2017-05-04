@@ -191,6 +191,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Areas\Admin\Controllers\SectionController.cs" />
     <Compile Include="Controllers\ProductContentController.cs" />
+    <Compile Include="Controllers\RegisterCodeController.cs" />
     <Compile Include="Entities\Item.cs" />
     <Compile Include="Entities\ItemType.cs" />
     <Compile Include="Entities\Part.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Extensions\SectionExtensions.cs" />
+    <Compile Include="Extensions\SubscriptionExtensions.cs" />
     <Compile Include="Extensions\ThumbnailExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -346,6 +348,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\JWPlayer.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\RegisterCode.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -408,6 +411,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\RegisterCode\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
